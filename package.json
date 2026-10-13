@@ -1,9 +1,33 @@
 {
   "name": "monopol",
-  "version": "1.0.0",
-  "description": "Nettleserbasert eiendomsspill inspirert av Monopol, med egne temaer.",
+  "version": "2.0.0",
   "private": true,
+  "type": "module",
+  "description": "3D eiendomsspill i nettleseren, inspirert av Monopol.",
   "scripts": {
-    "test": "node test/rules.test.js && node test/simulate.js 200"
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fontsource/fredoka": "^5.3.0",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.1",
+    "@react-three/rapier": "^2.2.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "three": "^0.186.1",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4"
   }
 }

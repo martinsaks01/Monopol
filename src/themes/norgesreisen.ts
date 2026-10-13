@@ -2,13 +2,12 @@
  * Standardtema: «Norgesreisen»
  *
  * Et tema beskriver ALT innhold i spillet: felter, fargegrupper, kortstokker og regler.
- * Kopier denne fila (eller last ned JSON-malen fra startskjermen) for å lage ditt eget brett.
- * Se README.md for full beskrivelse av formatet.
+ * Lag ditt eget ved å kopiere denne fila, eller last ned temaet som JSON fra startskjermen,
+ * endre det og importer det igjen. Se README.md for hele formatet.
  */
-(function (root, theme) {
-  if (typeof module === 'object' && module.exports) module.exports = theme;
-  else (root.MONOPOL_THEMES = root.MONOPOL_THEMES || []).push(theme);
-})(typeof self !== 'undefined' ? self : this, {
+import type { Theme } from '../game/types';
+
+const theme: Theme = {
   id: 'norgesreisen',
   name: 'Norgesreisen',
   description: 'Reis fra Vardø til Oslo og kjøp opp landet.',
@@ -155,4 +154,6 @@
       ],
     },
   },
-});
+};
+
+export default theme;

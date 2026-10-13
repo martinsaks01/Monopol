@@ -1,149 +1,129 @@
-# Monopol
+# Monopol 3D
 
-Et nettleserbasert eiendomsspill inspirert av Monopol og de digitale versjonene av det. Det er laget i ren HTML, CSS og JavaScript, så du trenger verken byggesteg, server eller installasjon.
+Et eiendomsspill i 3D, inspirert av Monopol. Det kjører i nettleseren på PC, mobil og iPad.
 
-## Kom i gang
+**Dette er med:**
+- 3D-brett med terninger som triller med ekte fysikk
+- brikker som hopper fra felt til felt
+- partikkeleffekter og lydeffekter
+- datamotstandere
+- XP, nivåer, prestasjoner og ting du kan låse opp
 
-Åpne `index.html` i en nettleser. Det er alt.
+## Spille
 
-(Vil du heller kjøre via en lokal server, går for eksempel `python3 -m http.server` og deretter http://localhost:8000 fint.)
+**På nett:** Når GitHub Pages er slått på, publiseres spillet automatisk ved hver push. Se «Publisering» nedenfor.
+
+**Lokalt:** Krever [Node.js](https://nodejs.org) 20 eller nyere.
+
+```bash
+npm install
+npm run dev
+```
+
+Åpne adressen som vises (f.eks. http://localhost:5173). Med `--host` kan du også åpne spillet fra mobil eller iPad på samme nett.
 
 ## Funksjoner
 
-- **2–8 spillere**: mennesker på samme skjerm (hot-seat) og/eller datamotstandere (AI)
-- **Komplett regelsett**
-  - kjøp av eiendommer, stasjoner og verk
-  - leie, og dobbel leie når man eier hele fargegruppen
-  - hus og hoteller med jevn bygging og et begrenset antall bygninger i banken
-  - pantsetting og innløsning (10 % rente)
-  - **auksjon** når en eiendom ikke blir kjøpt
-  - **handel** mellom spillere: eiendommer, penger og kom-ut-av-fengsel-kort
-  - fengsel: betal bot, bruk kort eller slå dobbel. Tre doble på rad sender deg i fengsel
-  - Sjanse- og Prøv lykken-kort med ulike effekter
-  - gjeld og konkurs: eiendelene går til kreditoren eller tilbake til banken
-- **Husregler** du kan slå av og på: pott på Gratis parkering, dobbel lønn på Start, auksjoner, jevn bygging, startpenger og mer
-- **Datamotstandere** som kjøper, byr på auksjoner, bygger, pantsetter, betaler seg ut av fengsel og foreslår og vurderer handler
-- **Automatisk lagring** i nettleseren. Du kan også laste ned spillet som en fil og laste det inn igjen
-- Animerte terninger og brikker, logg over hendelser, skjøter (eiendomskort) og justerbar hastighet
-- **Egne temaer**: lag ditt eget brett med egne felter, priser, grupper, kort og regler
+**Spillet**
+- Komplette regler:
+  - kjøp, leie og hus/hotell med jevn bygging
+  - pantsetting og auksjoner
+  - handel med eiendommer, penger og fengselskort
+  - fengsel, Sjanse- og Prøv lykken-kort
+  - gjeld og konkurs
+- **Spillmoduser:**
+  - Klassisk
+  - Hurtigspill: 2 eiendommer hver ved start, maks 40 turer, rikeste vinner
+  - Egne regler
+- **2–6 spillere:** mennesker på samme skjerm og/eller datamotstandere. Datamotstanderne kjøper, byr, bygger, pantsetter og foreslår handler.
+- **Lagring:** spillet lagres automatisk og kan fortsettes senere. Det kan også lastes ned og inn som fil.
+
+**3D og effekter**
+- **Terninger:** de kastes fysisk (Rapier), og resultatet leses av fra siden som faktisk havner opp.
+- **Brikker:** de hopper felt for felt og flyr til fengselet.
+- **Kamera:** det følger handlingen. Dra for å rotere og klyp/scroll for å zoome.
+- **Effekter:**
+  - mynter når noen får penger
+  - gnister ved kjøp
+  - konfetti for komplette fargegrupper og seier
+  - kortene snus med animasjon
+- **Lyd:** syntetiserte lydeffekter og valgfri bakgrunnsmusikk. Ingen lydfiler trengs.
+
+**Progresjon** (lagres lokalt per enhet)
+- XP for kjøp, bygging, leie, handler, fargegrupper og seire
+- 20 nivåer, 16 prestasjoner og statistikk
+- Opplåsbare ting:
+  - 8 brikker
+  - 5 overflater (plast, metall, gull, glass, neon)
+  - 4 terningsett
+  - 4 bordmiljøer
 
 ## Lage eget brett, egne felter og kort
 
-Alt innhold ligger i et **tema**. Standardtemaet «Norgesreisen» ligger i `themes/standard.js`.
+Alt innhold ligger i et **tema**. Standardtemaet «Norgesreisen» ligger i `src/themes/norgesreisen.ts`.
 
-**Enkleste vei:** Velg temaet på startskjermen, trykk **«Last ned som JSON»**, rediger fila og importer den igjen med **«Importer tema»**. Importerte temaer lagres i nettleseren.
+- **Uten koding:** Velg **Nytt spill**, trykk **Last ned JSON**, endre fila og importer den igjen med **Importer**.
+- **I koden:** Kopier `norgesreisen.ts` og legg det nye temaet til i `src/themes/index.ts`.
 
-**Permanent tema i koden:** Kopier `themes/standard.js` til for eksempel `themes/mitt-tema.js`, gi det en ny `id` og et nytt `name`, og legg til en linje i `index.html`:
+### Felttyper
 
-```html
-<script src="themes/mitt-tema.js"></script>
-```
+| Type       | Eksempel |
+|------------|----------|
+| `start`    | `{ type: 'start', name: 'Start' }` |
+| `property` | `{ type: 'property', name: 'Oslo', group: 'moerkblaa', price: 400, rent: [50, 200, 600, 1400, 1700, 2000] }` |
+| `station`  | `{ type: 'station', name: 'Dovrebanen', price: 200 }` |
+| `utility`  | `{ type: 'utility', name: 'Vannverket', price: 150, icon: '💧' }` |
+| `tax`      | `{ type: 'tax', name: 'Inntektsskatt', amount: 200 }` |
+| `card`     | `{ type: 'card', name: 'Sjanse', deck: 'sjanse' }` |
+| `jail`, `parking`, `gotojail` | `{ type: 'jail', name: 'Fengsel' }` |
 
-### Temaformat
+**Regler for brettet:**
+- Antall felter må være delelig med 4.
+- Felt 0 må være Start.
+- `rent` er leien uten hus, med 1–4 hus og med hotell (6 tall).
 
-```js
-{
-  id: 'mitt-tema',
-  name: 'Mitt tema',
-  description: 'Kort beskrivelse',
-  rules: { startMoney: 1500, goSalary: 200, currency: 'kr' },   // valgfritt
-  groups: {
-    brun: { name: 'Brun', color: '#8b5a2b', houseCost: 50 },
-    // ...
-  },
-  board: [ /* felter, se under */ ],
-  decks: {
-    sjanse: { name: 'Sjanse', color: '#f39221', icon: '❓', cards: [ /* kort */ ] },
-  },
-}
-```
+Fargegrupper defineres under `groups` med navn, farge og huspris.
 
-### Felter (`board`)
+### Korteffekter
 
-Antall felter må være delelig med 4 (standard er 40), og felt 0 må være Start. Hjørnene ligger på felt 0, n/4, n/2 og 3n/4.
-
-| Type        | Eksempel                                                                 |
-|-------------|---------------------------------------------------------------------------|
-| `start`     | `{ type: 'start', name: 'Start' }`                                        |
-| `property`  | `{ type: 'property', name: 'Oslo', group: 'moerkblaa', price: 400, rent: [50, 200, 600, 1400, 1700, 2000] }` |
-| `station`   | `{ type: 'station', name: 'Dovrebanen', price: 200 }`                     |
-| `utility`   | `{ type: 'utility', name: 'Vannverket', price: 150, icon: '💧' }`         |
-| `tax`       | `{ type: 'tax', name: 'Inntektsskatt', amount: 200 }`                     |
-| `card`      | `{ type: 'card', name: 'Sjanse', deck: 'sjanse' }`                        |
-| `jail`      | `{ type: 'jail', name: 'Fengsel' }`                                       |
-| `parking`   | `{ type: 'parking', name: 'Gratis parkering' }`                           |
-| `gotojail`  | `{ type: 'gotojail', name: 'Gå i fengsel' }`                              |
-
-`rent` for eiendommer er leien uten hus, med 1, 2, 3 og 4 hus, og med hotell (6 tall).
-Valgfrie felt på alle felter er `icon` (en emoji). På kjøpbare felter kan du i tillegg sette `mortgage` (pantverdi), `houseCost` (overstyrer gruppen) og `rent` på stasjoner og verk (overstyrer reglene).
-
-### Kort (`decks.*.cards`)
-
-| Effekt                                                         | Betydning                                     |
-|----------------------------------------------------------------|-----------------------------------------------|
-| `{ action: 'advance', to: 24 }`                                | Gå til felt 24 (lønn hvis du passerer Start)  |
-| `{ action: 'nearest', target: 'station', rentMultiplier: 2 }`  | Gå til nærmeste stasjon og betal dobbel leie  |
-| `{ action: 'nearest', target: 'utility', diceMultiplier: 10 }` | Gå til nærmeste verk og betal 10 × terningene |
-| `{ action: 'back', steps: 3 }`                                 | Gå tilbake 3 felt                             |
-| `{ action: 'move', steps: 5 }`                                 | Gå 5 felt fram                                |
-| `{ action: 'money', amount: 50 }` / `amount: -50`              | Motta eller betal                             |
-| `{ action: 'payEach', amount: 50 }`                            | Betal hver medspiller                         |
-| `{ action: 'collectEach', amount: 10 }`                        | Motta fra hver medspiller                     |
-| `{ action: 'repairs', house: 25, hotel: 100 }`                 | Betal per hus og per hotell                   |
-| `{ action: 'jail' }`                                           | Gå i fengsel                                  |
-| `{ action: 'jailCard' }`                                       | Kom-ut-av-fengsel-kort                        |
-
-Hvert kort har også en `text` som vises når kortet trekkes.
-
-### Regler (`rules`)
-
-Alle reglene kan settes i temaet. Mange av dem kan også endres på startskjermen.
-
-| Regel                    | Standard           | Beskrivelse                                         |
-|--------------------------|--------------------|-----------------------------------------------------|
-| `startMoney`             | 1500               | Startpenger                                         |
-| `goSalary`               | 200                | Lønn når man passerer Start                         |
-| `doubleSalaryOnGo`       | false              | Dobbel lønn når man lander rett på Start            |
-| `jailFine`               | 50                 | Bot for å komme ut av fengsel                       |
-| `maxJailTurns`           | 3                  | Antall forsøk på å slå dobbel                       |
-| `doublesToJail`          | 3                  | Antall doble på rad som sender deg i fengsel        |
-| `freeParkingJackpot`     | false              | Skatter og bøter samles i en pott                   |
-| `auctions`               | true               | Auksjon når en eiendom ikke kjøpes                  |
-| `evenBuild`              | true               | Hus må bygges jevnt i en gruppe                     |
-| `houses` / `hotels`      | 32 / 12            | Antall bygninger i banken                           |
-| `mortgageInterest`       | 0.1                | Rente ved innløsning                                |
-| `buildingSellRate`       | 0.5                | Andel av byggeprisen man får ved salg av hus        |
-| `monopolyRentMultiplier` | 2                  | Faktor for grunnleie når man eier hele gruppen      |
-| `stationRent`            | [25, 50, 100, 200] | Leie etter antall stasjoner man eier                |
-| `utilityMultipliers`     | [4, 10]            | Terningfaktor etter antall verk man eier            |
-| `collectRentInJail`      | true               | Om man kan kreve leie mens man sitter i fengsel     |
-| `currency`               | 'kr'               | Valutategn                                          |
+| Effekt | Betydning |
+|--------|-----------|
+| `{ action: 'advance', to: 24 }` | Gå til felt 24 |
+| `{ action: 'nearest', target: 'station', rentMultiplier: 2 }` | Nærmeste stasjon, dobbel leie |
+| `{ action: 'nearest', target: 'utility', diceMultiplier: 10 }` | Nærmeste verk, 10 × terningene |
+| `{ action: 'back', steps: 3 }` / `{ action: 'move', steps: 5 }` | Gå tilbake / fram |
+| `{ action: 'money', amount: 50 }` | Motta (positivt) eller betal (negativt) |
+| `{ action: 'payEach', amount: 50 }` / `collectEach` | Betal til / motta fra alle |
+| `{ action: 'repairs', house: 25, hotel: 100 }` | Betal per hus og hotell |
+| `{ action: 'jail' }` / `{ action: 'jailCard' }` | Fengsel / kom-ut-av-fengsel-kort |
 
 ## Struktur
 
 ```
-index.html          Siden
-css/style.css       Utseende
-js/engine.js        Spillmotoren: alle regler, ren logikk uten DOM
-js/ai.js            Datamotstanderen
-js/ui.js            Grensesnitt: brett, dialoger, animasjoner og lagring
-themes/standard.js  Standardtemaet (felter, kort og regler)
-test/               Regeltester og simulering av AI-mot-AI-spill
+src/game/       Spillmotor og AI. Ren logikk uten grafikk; tilstanden er ren JSON.
+src/scene/      3D-scenen (React Three Fiber): brett, brikker, terninger, effekter og kamera.
+src/store/      Felles tilstand, og regissøren som spiller av hendelser og styrer AI-en.
+src/ui/         Menyer, HUD og dialoger.
+src/progress/   XP, nivåer, prestasjoner og opplåsbare ting.
+src/audio/      Syntetiserte lydeffekter.
+src/themes/     Brett-temaer.
+test/           Regeltester og simulering av 100 AI-spill.
 ```
 
-Motoren er skilt fra grensesnittet, så den kan testes i Node og senere gjenbrukes, for eksempel til flerspiller over nett.
+Motoren sender ut en strøm av hendelser (kast, flytt, betal, kjøp …). Grafikk, lyd og XP-systemet reagerer på dem. Den samme strømmen kan senere sendes over nett for flerspiller.
 
-## Tester
+## Utvikling
 
+```bash
+npm test          # regeltester og AI-simulering
+npm run build     # typesjekk og produksjonsbygg i dist/
 ```
-node test/rules.test.js     # målrettede regeltester
-node test/simulate.js 300   # simulerer 300 AI-spill og sjekker at alt henger sammen
-```
 
-## Mulige videre steg
+## Publisering (GitHub Pages)
 
-- Visuell editor for temaer i nettleseren
-- Flerspiller over nett (motoren er klar for det, siden tilstanden er ren JSON)
-- Lyd og flere animasjoner
-- Flere AI-nivåer
-- Tidsbegrenset spill
+`.github/workflows/deploy.yml` tester, bygger og publiserer ved hver push. Første gang må Pages slås på:
+
+1. Gå til **Settings → Pages** i repoet på GitHub.
+2. Under **Source**, velg **GitHub Actions**.
+
+Spillet ligger da på `https://<brukernavn>.github.io/<repo>/`.
