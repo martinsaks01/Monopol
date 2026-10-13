@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monopol</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Oppsett av nytt spill -->
+  <div id="setup" class="screen"></div>
+
+  <!-- Selve spillet -->
+  <div id="game" class="screen hidden">
+    <div id="board-wrap">
+      <div id="board"></div>
+    </div>
+    <aside id="sidebar">
+      <div class="sidebar-top">
+        <button class="btn small" data-action="menu">☰ Meny</button>
+        <span id="turn-counter"></span>
+      </div>
+      <div id="players"></div>
+      <h3 class="log-title">Hendelser</h3>
+      <div id="log"></div>
+    </aside>
+  </div>
+
+  <div id="modal-root"></div>
+  <div id="toasts"></div>
+
+  <!-- Temaer: legg til egne temafiler her, eller importer JSON fra startskjermen -->
+  <script src="themes/standard.js"></script>
+
+  <script src="js/engine.js"></script>
+  <script src="js/ai.js"></script>
+  <script src="js/ui.js"></script>
+</body>
+</html>

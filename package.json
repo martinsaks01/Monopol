@@ -1,0 +1,9 @@
+{
+  "name": "monopol",
+  "version": "1.0.0",
+  "description": "Nettleserbasert eiendomsspill inspirert av Monopol, med egne temaer.",
+  "private": true,
+  "scripts": {
+    "test": "node test/rules.test.js && node test/simulate.js 200"
+  }
+}
